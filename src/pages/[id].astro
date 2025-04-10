@@ -1,0 +1,98 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+import { Image } from "astro:assets";
+import { getCollection, render } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+
+export async function getStaticPaths() {
+  const docs = await getCollection("docs");
+  return docs.map((page: CollectionEntry<"docs">) => ({
+    params: { id: page.id },
+    props: { page },
+  }));
+}
+
+interface Props {
+  page: CollectionEntry<"docs">;
+}
+
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+const { page } = Astro.props;
+const { Content, headings } = await render(page);
+---
+
+<Layout>
+  <main
+    class="grid lg:grid-cols-[20rem_1fr_4rem] xl:grid-cols-[20rem_1fr_20rem] justify-items-center min-h-[calc(100vh-8rem)]"
+  >
+    <aside class="hidden lg:block w-full border-r border-zinc-100">
+      <nav class="sticky top-0 flex flex-col justify-center p-8">
+        <h2 class="text-lg font-bold pb-4">Table of Contents</h2>
+        <ul
+          class="flex flex-col border border-zinc-100 rounded-md h-[calc(100vh-8rem+1rem)] overflow-y-scroll px-4"
+        >
+          <li class="font-bold">
+            <a href="#title" class="block hover:underline py-2">
+              {page.data.title}
+            </a>
+          </li>
+          {
+            headings.map(({ depth, slug, text }: Heading) => (
+              <li
+                class:list={[
+                  "border-zinc-200",
+                  {
+                    "font-semibold": depth <= 2,
+                    "border-l pl-4": depth > 1,
+                    "ml-4": depth == 3,
+                    "ml-8": depth == 4,
+                    "ml-12": depth == 5,
+                    "ml-16": depth == 6,
+                  },
+                ]}
+              >
+                <a href={`#${slug}`} class="block hover:underline py-2">
+                  {text}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+    </aside>
+
+    <article class="prose max-w-2xl xl:max-w-3xl p-8 [&>p]:indent-8">
+      <header>
+        <h1 id="title">{page.data.title}</h1>
+        <h3>
+          {page.data.description}
+        </h3>
+      </header>
+
+      <figure>
+        <div class="relative rounded-lg overflow-clip shadow-xl">
+          <div class="absolute inset-0 bg-zinc-200 animate-pulse"></div>
+          <Image
+            src="https://picsum.photos/1920/1080"
+            alt="Lorem Picsum"
+            class="relative h-64 object-cover"
+            width={1920}
+            height={1080}
+            loading={"eager"}
+          />
+        </div>
+        <figcaption>Fig. 1. Random image from Lorem Picsum.</figcaption>
+      </figure>
+
+      <Content />
+    </article>
+
+    <aside class="hidden lg:block size-full border-l border-zinc-100"></aside>
+  </main>
+</Layout>

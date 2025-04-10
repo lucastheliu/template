@@ -1,11 +1,50 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import Layout from "../layouts/Layout.astro";
+import { Image } from "astro:assets";
 ---
 
 <Layout>
-	<Welcome />
+  <main
+    class="grid lg:grid-cols-[20rem_1fr_4rem] xl:grid-cols-[20rem_1fr_20rem] justify-items-center min-h-[calc(100vh-8rem)]"
+  >
+    <aside class="hidden lg:block w-full border-r border-zinc-100"></aside>
+
+    <article class="prose max-w-2xl xl:max-w-3xl p-8 [&>p]:indent-8">
+      <header>
+        <h1 id="title">Welcome to the Template Project</h1>
+        <h3>My carefully crafted template project designed for wiki use.</h3>
+        <p>
+          Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+          Necessitatibus, quisquam ut repellat vero dolor blanditiis, velit
+          eveniet doloribus, inventore labore repellendus eius officiis iusto
+          totam nobis quam explicabo perferendis ipsum!
+        </p>
+      </header>
+
+      <figure>
+        <div class="relative rounded-lg overflow-clip shadow-xl">
+          <div class="absolute inset-0 bg-zinc-200 animate-pulse"></div>
+          <Image
+            src="https://picsum.photos/1920/1080"
+            alt="Lorem Picsum"
+            class="relative h-64 object-cover"
+            width={1920}
+            height={1080}
+            loading={"eager"}
+          />
+        </div>
+        <figcaption>Fig. 1. Random image from Lorem Picsum.</figcaption>
+      </figure>
+
+      <h2>Lorem ipsum dolor sit amet consectetur adipisicing elit.</h2>
+      <p>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita
+        similique perspiciatis quod reiciendis vel tenetur voluptate esse vitae,
+        soluta earum eum eaque harum ea in est architecto! Eveniet, laborum
+        nihil.
+      </p>
+    </article>
+
+    <aside class="hidden lg:block size-full border-l border-zinc-100"></aside>
+  </main>
 </Layout>
